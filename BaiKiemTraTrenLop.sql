@@ -134,10 +134,10 @@ BEGIN
         s.FullName,
         c.CourseName,
         e.Score
-    FROM Student s
-    JOIN Enrollment e
+    FROM Student AS s
+    JOIN Enrollment AS e
         ON s.StudentID = e.StudentID
-    JOIN Course c
+    JOIN Course AS c
         ON c.CourseID = e.CourseID
     WHERE e.CourseID = varCourseID
     AND e.Score = (
@@ -159,8 +159,8 @@ SELECT
     s.DeptID,
     e.CourseID,
     e.Score
-FROM Student s
-JOIN Enrollment e
+FROM Student AS s
+JOIN Enrollment AS e
     ON s.StudentID = e.StudentID
 WHERE s.DeptID = 'IT'
 AND e.CourseID = 'DB201'
