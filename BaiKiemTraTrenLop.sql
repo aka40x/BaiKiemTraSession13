@@ -124,18 +124,46 @@ LIMIT 1;
 
 -- Câu 5
 DELIMITER //
-CREATE PROCEDURE GetTopScoreStudent (
-	IN varCourseID VARCHAR(6)
+
+CREATE PROCEDURE GetTopScoreStudent(
+    IN varCourseID VARCHAR(6)
 )
-
 BEGIN
-	SELECT s.studentID, s.Fullname, e.score 
-    FROM STUDENT AS s
-    JOIN enrollment as e ON e.studentId = s.studentID
-    JOIN course AS c ON c.courseID = e.courseID
-    WHERE e.courseId = varCourseID and e.score = (SELECT MAX(score) FROM enrollment);
-END
+    SELECT
+        s.StudentID,
+        s.FullName,
+        c.CourseName,
+        e.Score
+    FROM Student s
+    JOIN Enrollment e
+        ON s.StudentID = e.StudentID
+    JOIN Course c
+        ON c.CourseID = e.CourseID
+    WHERE e.CourseID = varCourseID
+    AND e.Score = (
+        SELECT MAX(Score)
+        FROM Enrollment
+        WHERE CourseID = varCourseID
+    );
+END //
 
-// DELIMITER ;
+DELIMITER ;
 
 CALL GetTopScoreStudent('DB201');
+
+-- Câu 6a
+CREATE VIEW ViewITEnrollmentDB AS
+SELECT
+    s.StudentID,
+    s.FullName,
+    s.DeptID,
+    e.CourseID,
+    e.Score
+FROM Student s
+JOIN Enrollment e
+    ON s.StudentID = e.StudentID
+WHERE s.DeptID = 'IT'
+AND e.CourseID = 'DB201'
+WITH CHECK OPTION;
+
+SELECT * FROM ViewITEnrollmentDB;
